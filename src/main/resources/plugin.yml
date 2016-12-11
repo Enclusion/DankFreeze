@@ -1,0 +1,8 @@
+main: com.buzznacker.freeze.Freeze
+name: FreezePlayer
+version: 1.0
+commands:
+  freeze:
+    usage: Correct usage is /freeze <playername>
+permissions:
+  freeze.freeze: {}
