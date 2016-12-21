@@ -20,13 +20,13 @@ public class InventoryListener implements Listener {
 
         Player player = (Player) e.getPlayer();
 
-        if(plugin.getFrozenManager().isFrozen(player.getUniqueId())) {
+        if(plugin.getManagerHandler().getFrozenManager().isFrozen(player.getUniqueId())) {
 
             //Cant reopen an inventory in the same tick as the InventoryCloseEvent so we wait 1 tick to open it.
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    player.openInventory(plugin.getInventoryManager().getFrozenInv());
+                    player.openInventory(plugin.getManagerHandler().getInventoryManager().getFrozenInv());
                 }
             }.runTaskLater(plugin, 1);
 

@@ -1,15 +1,15 @@
-package com.buzznacker.freeze.manager;
+package com.buzznacker.freeze.manager.managers;
 
 import com.buzznacker.freeze.Freeze;
+import com.buzznacker.freeze.manager.Manager;
 import org.bukkit.inventory.Inventory;
 
-public class InventoryManager {
+public class InventoryManager extends Manager {
 
     private Inventory frozenInv;
 
-    private Freeze plugin;
     public InventoryManager(Freeze plugin) {
-        this.plugin = plugin;
+        super(plugin);
         initiateFrozenInv();
     }
 

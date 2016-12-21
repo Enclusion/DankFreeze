@@ -32,18 +32,18 @@ public class FreezeCmd implements CommandExecutor {
             return true;
         }
 
-        if(plugin.getFrozenManager().isFrozen(target.getUniqueId())) {
-            plugin.getFrozenManager().unfreezeUUID(target.getUniqueId());
+        if(plugin.getManagerHandler().getFrozenManager().isFrozen(target.getUniqueId())) {
+            plugin.getManagerHandler().getFrozenManager().unfreezeUUID(target.getUniqueId());
             sender.sendMessage(ChatColor.GREEN + "You unfroze " + target.getName());
             target.sendMessage(ChatColor.GREEN + "You have been unfrozen by a staff member.");
             target.closeInventory();
             return true;
         }
 
-        plugin.getFrozenManager().freezeUUID(target.getUniqueId());
+        plugin.getManagerHandler().getFrozenManager().freezeUUID(target.getUniqueId());
         sender.sendMessage(ChatColor.GREEN + "You froze " + target.getName());
         target.sendMessage(ChatColor.GREEN + "You have been frozen by a staff member ! Do not log out !");
-        target.openInventory(plugin.getInventoryManager().getFrozenInv());
+        target.openInventory(plugin.getManagerHandler().getInventoryManager().getFrozenInv());
 
         return true;
     }
