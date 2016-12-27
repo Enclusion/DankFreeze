@@ -4,6 +4,7 @@ import com.buzznacker.freeze.Freeze;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class EntityListener implements Listener {
@@ -22,6 +23,18 @@ public class EntityListener implements Listener {
                 e.setCancelled(true);
             }
 
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
+        if(e.getDamager() instanceof Player) {
+
+            Player player = (Player) e.getDamager();
+
+            if(plugin.getManagerHandler().getFrozenManager().isFrozen(player.getUniqueId())) {
+                e.setCancelled(true);
+            }
         }
     }
 }

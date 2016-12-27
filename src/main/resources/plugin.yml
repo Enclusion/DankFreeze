@@ -4,5 +4,6 @@ version: 1.0
 commands:
   freeze:
     usage: Correct usage is /freeze <playername>
+    aliases: [ss]
 permissions:
   freeze.freeze: {}

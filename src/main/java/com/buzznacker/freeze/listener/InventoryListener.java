@@ -4,6 +4,7 @@ import com.buzznacker.freeze.Freeze;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -29,6 +30,18 @@ public class InventoryListener implements Listener {
                     player.openInventory(plugin.getManagerHandler().getInventoryManager().getFrozenInv());
                 }
             }.runTaskLater(plugin, 1);
+
+        }
+    }
+
+    @EventHandler
+    public void onInvClick(InventoryClickEvent e) {
+
+        Player player = (Player) e.getWhoClicked();
+
+        if(plugin.getManagerHandler().getFrozenManager().isFrozen(player.getUniqueId())) {
+
+            e.setCancelled(true);
 
         }
     }
