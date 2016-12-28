@@ -25,8 +25,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e) {
-        if(plugin.getManagerHandler().getFrozenManager().isFrozen(e.getPlayer().getUniqueId())) {
+        if(plugin.getManagerHandler().getFrozenManager().isFrozen(e.getPlayer().getUniqueId()))
             e.setCancelled(true);
-        }
     }
 }
