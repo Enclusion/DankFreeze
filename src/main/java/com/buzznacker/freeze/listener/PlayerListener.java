@@ -4,6 +4,7 @@ import com.buzznacker.freeze.Freeze;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener {
@@ -19,6 +20,13 @@ public class PlayerListener implements Listener {
             plugin.getServer().broadcast(ChatColor.GOLD + e.getPlayer().getName() + " logged out while being frozen", "freeze.freeze");
             plugin.getManagerHandler().getFrozenManager().unfreezeUUID(e.getPlayer().getUniqueId());
             e.getPlayer().setWalkSpeed(0.2F);
+        }
+    }
+
+    @EventHandler
+    public void onItemDrop(PlayerDropItemEvent e) {
+        if(plugin.getManagerHandler().getFrozenManager().isFrozen(e.getPlayer().getUniqueId())) {
+            e.setCancelled(true);
         }
     }
 }
