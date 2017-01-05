@@ -1,4 +1,4 @@
-package com.buzznacker.freeze.listener;
+package com.buzznacker.freeze.listener.listeners;
 
 import com.buzznacker.freeze.Freeze;
 import org.bukkit.ChatColor;
@@ -19,6 +19,7 @@ public class PlayerListener implements Listener {
         if (plugin.getManagerHandler().getFrozenManager().isFrozen(e.getPlayer().getUniqueId())) {
             plugin.getServer().broadcast(ChatColor.GOLD + e.getPlayer().getName() + " logged out while being frozen", "freeze.freeze");
             plugin.getManagerHandler().getFrozenManager().unfreezeUUID(e.getPlayer().getUniqueId());
+            plugin.getManagerHandler().getPlayerSnapshotManager().removeSnapshot(e.getPlayer());
             e.getPlayer().setWalkSpeed(0.2F);
         }
     }

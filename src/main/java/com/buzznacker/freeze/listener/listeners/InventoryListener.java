@@ -1,4 +1,4 @@
-package com.buzznacker.freeze.listener;
+package com.buzznacker.freeze.listener.listeners;
 
 import com.buzznacker.freeze.Freeze;
 import org.bukkit.entity.Player;

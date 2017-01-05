@@ -1,6 +1,7 @@
 package com.buzznacker.freeze.commands;
 
 import com.buzznacker.freeze.Freeze;
+import com.buzznacker.freeze.player.PlayerSnapshot;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -33,20 +34,39 @@ public class FreezeCmd implements CommandExecutor {
         }
 
         if(plugin.getManagerHandler().getFrozenManager().isFrozen(target.getUniqueId())) {
-            plugin.getManagerHandler().getFrozenManager().unfreezeUUID(target.getUniqueId());
             sender.sendMessage(ChatColor.GREEN + "You unfroze " + target.getName());
-            target.sendMessage(ChatColor.GREEN + "You have been unfrozen by a staff member.");
-            target.closeInventory();
-            target.setWalkSpeed(0.2F);
+            unfreezePlayer(target);
             return true;
         }
 
-        plugin.getManagerHandler().getFrozenManager().freezeUUID(target.getUniqueId());
         sender.sendMessage(ChatColor.GREEN + "You froze " + target.getName());
-        target.sendMessage(ChatColor.GREEN + "You have been frozen by a staff member ! Do not log out ! (Do not even try to use SelfDestruct)");
-        target.openInventory(plugin.getManagerHandler().getInventoryManager().getFrozenInv());
-        target.setWalkSpeed(0);
-
+        freezePlayer(target);
         return true;
+    }
+
+    private void freezePlayer(Player player) {
+        plugin.getManagerHandler().getPlayerSnapshotManager().takeSnapshot(player);
+        plugin.getManagerHandler().getFrozenManager().freezeUUID(player.getUniqueId());
+        player.sendMessage(ChatColor.GREEN + "You have been frozen by a staff member ! Do not log out ! (Do not even try to use SelfDestruct)");
+        player.getInventory().clear();
+        player.setWalkSpeed(0.0F);
+        player.getActivePotionEffects().clear();
+        player.openInventory(plugin.getManagerHandler().getInventoryManager().getFrozenInv());
+    }
+
+    private void unfreezePlayer(Player player) {
+        plugin.getManagerHandler().getFrozenManager().unfreezeUUID(player.getUniqueId());
+        player.sendMessage(ChatColor.GREEN + "You have been unfrozen by a staff member.");
+        player.closeInventory();
+        restorePlayerFromSnapshot(player, plugin.getManagerHandler().getPlayerSnapshotManager().getSnapshot(player));
+        plugin.getManagerHandler().getPlayerSnapshotManager().removeSnapshot(player);
+    }
+
+    private void restorePlayerFromSnapshot(Player player, PlayerSnapshot playerSnapshot) {
+        player.getInventory().clear();
+        player.getInventory().setContents(playerSnapshot.getMainContent());
+        player.getInventory().setArmorContents(playerSnapshot.getArmorContent());
+        player.setWalkSpeed(playerSnapshot.getWalkSpeed());
+        player.addPotionEffects(playerSnapshot.getPotionEffects());
     }
 }
