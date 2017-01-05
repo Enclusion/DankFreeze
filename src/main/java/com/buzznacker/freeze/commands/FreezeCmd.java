@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 
 public class FreezeCmd implements CommandExecutor {
 
@@ -36,7 +37,7 @@ public class FreezeCmd implements CommandExecutor {
         if(plugin.getManagerHandler().getFrozenManager().isFrozen(target.getUniqueId())) {
             sender.sendMessage(ChatColor.GREEN + "You unfroze " + target.getName());
 
-            plugin.getServer().broadcast(ChatColor.GREEN + target.getName() + ChatColor.GOLD + " has been unfrozen by " + ChatColor.GREEN +
+            plugin.getServer().broadcast(ChatColor.RED + target.getName() + ChatColor.GOLD + " has been unfrozen by " + ChatColor.RED +
                     (sender instanceof Player ? sender.getName() : "Console"), "freeze.freeze");
 
             unfreezePlayer(target);
@@ -45,7 +46,7 @@ public class FreezeCmd implements CommandExecutor {
 
         sender.sendMessage(ChatColor.GREEN + "You froze " + target.getName());
 
-        plugin.getServer().broadcast(ChatColor.GREEN + target.getName() + ChatColor.GOLD + " has been frozen by " + ChatColor.GREEN +
+        plugin.getServer().broadcast(ChatColor.RED + target.getName() + ChatColor.GOLD + " has been frozen by " + ChatColor.RED +
                 (sender instanceof Player ? sender.getName() : "Console"), "freeze.freeze");
 
         freezePlayer(target);
@@ -57,8 +58,10 @@ public class FreezeCmd implements CommandExecutor {
         plugin.getManagerHandler().getFrozenManager().freezeUUID(player.getUniqueId());
         player.sendMessage(ChatColor.GREEN + "You have been frozen by a staff member ! Do not log out ! (Do not even try to use SelfDestruct)");
         player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
         player.setWalkSpeed(0.0F);
-        player.getActivePotionEffects().clear();
+        clearPotionEffects(player);
+        player.updateInventory();
         player.openInventory(plugin.getManagerHandler().getInventoryManager().getFrozenInv());
 
     }
@@ -77,5 +80,12 @@ public class FreezeCmd implements CommandExecutor {
         player.getInventory().setArmorContents(playerSnapshot.getArmorContent());
         player.setWalkSpeed(playerSnapshot.getWalkSpeed());
         player.addPotionEffects(playerSnapshot.getPotionEffects());
+        player.updateInventory();
+    }
+
+    private void clearPotionEffects(Player player) {
+        for(PotionEffect effect : player.getActivePotionEffects()) {
+            player.removePotionEffect(effect.getType());
+        }
     }
 }

@@ -12,13 +12,12 @@ public class ListenerHandler {
     public ListenerHandler(Freeze plugin) {
         this.plugin = plugin;
         loadListeners();
-        listeners = null;
     }
 
     private Listener[] listeners = {
-            new EntityListener(plugin),
-            new InventoryListener(plugin),
-            new PlayerListener(plugin)
+            new EntityListener(this),
+            new InventoryListener(this),
+            new PlayerListener(this)
     };
 
     private void loadListeners() {
@@ -27,5 +26,8 @@ public class ListenerHandler {
         }
     }
 
+    public Freeze getPlugin() {
+        return plugin;
+    }
 
 }
