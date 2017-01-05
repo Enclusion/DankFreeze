@@ -23,7 +23,6 @@ public class PlayerListener implements Listener {
             handler.getPlugin().getServer().broadcast(ChatColor.GOLD + player.getName() + " logged out while being frozen", "freeze.freeze");
             handler.getPlugin().getManagerHandler().getFrozenManager().unfreezeUUID(player.getUniqueId());
             handler.getPlugin().getManagerHandler().getPlayerSnapshotManager().restorePlayer(player);
-            e.getPlayer().setWalkSpeed(0.2F);
         }
     }
 
