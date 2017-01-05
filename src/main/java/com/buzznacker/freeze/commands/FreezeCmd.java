@@ -63,24 +63,13 @@ public class FreezeCmd implements CommandExecutor {
         clearPotionEffects(player);
         player.updateInventory();
         player.openInventory(plugin.getManagerHandler().getInventoryManager().getFrozenInv());
-
     }
 
     private void unfreezePlayer(Player player) {
         plugin.getManagerHandler().getFrozenManager().unfreezeUUID(player.getUniqueId());
         player.sendMessage(ChatColor.GREEN + "You have been unfrozen by a staff member.");
         player.closeInventory();
-        restorePlayerFromSnapshot(player, plugin.getManagerHandler().getPlayerSnapshotManager().getSnapshot(player));
-        plugin.getManagerHandler().getPlayerSnapshotManager().removeSnapshot(player);
-    }
-
-    private void restorePlayerFromSnapshot(Player player, PlayerSnapshot playerSnapshot) {
-        player.getInventory().clear();
-        player.getInventory().setContents(playerSnapshot.getMainContent());
-        player.getInventory().setArmorContents(playerSnapshot.getArmorContent());
-        player.setWalkSpeed(playerSnapshot.getWalkSpeed());
-        player.addPotionEffects(playerSnapshot.getPotionEffects());
-        player.updateInventory();
+        plugin.getManagerHandler().getPlayerSnapshotManager().restorePlayer(player);
     }
 
     private void clearPotionEffects(Player player) {

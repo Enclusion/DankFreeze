@@ -21,11 +21,24 @@ public class PlayerSnapshotManager extends Manager {
         playerSnapshotMap.put(player.getUniqueId(), new PlayerSnapshot(player));
     }
 
-    public void removeSnapshot(Player player) {
+    public void restorePlayer(Player player) {
+        PlayerSnapshot playerSnapshot = getSnapshot(player);
+        if(playerSnapshot != null) {
+            player.getInventory().clear();
+            player.getInventory().setContents(playerSnapshot.getMainContent());
+            player.getInventory().setArmorContents(playerSnapshot.getArmorContent());
+            player.setWalkSpeed(playerSnapshot.getWalkSpeed());
+            player.addPotionEffects(playerSnapshot.getPotionEffects());
+            player.updateInventory();
+            removeSnapshot(player);
+        }
+    }
+
+    private void removeSnapshot(Player player) {
         playerSnapshotMap.remove(player.getUniqueId());
     }
 
-    public PlayerSnapshot getSnapshot(Player player) {
+    private PlayerSnapshot getSnapshot(Player player) {
         return playerSnapshotMap.get(player.getUniqueId());
     }
 }
