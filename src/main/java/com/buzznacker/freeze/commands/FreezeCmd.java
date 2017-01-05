@@ -35,11 +35,19 @@ public class FreezeCmd implements CommandExecutor {
 
         if(plugin.getManagerHandler().getFrozenManager().isFrozen(target.getUniqueId())) {
             sender.sendMessage(ChatColor.GREEN + "You unfroze " + target.getName());
+
+            plugin.getServer().broadcast(ChatColor.GREEN + target.getName() + ChatColor.GOLD + " has been unfrozen by " + ChatColor.GREEN +
+                    (sender instanceof Player ? sender.getName() : "Console"), "freeze.freeze");
+
             unfreezePlayer(target);
             return true;
         }
 
         sender.sendMessage(ChatColor.GREEN + "You froze " + target.getName());
+
+        plugin.getServer().broadcast(ChatColor.GREEN + target.getName() + ChatColor.GOLD + " has been frozen by " + ChatColor.GREEN +
+                (sender instanceof Player ? sender.getName() : "Console"), "freeze.freeze");
+
         freezePlayer(target);
         return true;
     }
@@ -52,6 +60,7 @@ public class FreezeCmd implements CommandExecutor {
         player.setWalkSpeed(0.0F);
         player.getActivePotionEffects().clear();
         player.openInventory(plugin.getManagerHandler().getInventoryManager().getFrozenInv());
+
     }
 
     private void unfreezePlayer(Player player) {
